@@ -56,15 +56,6 @@ function hi() {
   fi
 }
 
-function confirm() {
-  read -p "Do you accept these terms? (Y/N) " -n 1 -r
-  echo
-  if [[ ! $REPLY =~ ^[Yy] ]]; then
-    echo "Aborted"
-    exit 1
-  fi
-}
-
 function download_and_install() {
   mkdir -p $JULIA_DOWNLOAD
   cd $JULIA_DOWNLOAD
@@ -88,18 +79,14 @@ function download_and_install() {
   mkdir -p julia-$version
   tar zxf julia-$version.tar.gz -C julia-$version --strip-components 1
 
-  if [ ! -w $JULIA_INSTALL ]; then
-    SUDO=sudo
-  fi
-  $SUDO rm -f $JULIA_INSTALL/julia{,-$major,-$version}
+  rm -f $JULIA_INSTALL/julia{,-$major,-$version}
   julia=$PWD/julia-$version/bin/julia
-  $SUDO ln -s $julia $JULIA_INSTALL/julia
-  $SUDO ln -s $julia $JULIA_INSTALL/julia-$major
-  $SUDO ln -s $julia $JULIA_INSTALL/julia-$version
+  ln -s $julia $JULIA_INSTALL/julia
+  ln -s $julia $JULIA_INSTALL/julia-$major
+  ln -s $julia $JULIA_INSTALL/julia-$version
 }
 
 # --------------------------------------------------------
 
 hi
-confirm
 download_and_install
